@@ -4,7 +4,12 @@ public class SimpleUser implements User {
 
     String userName;
     PostList postList;
-
+public void init(){
+    System.out.println("Database connection success");
+}
+public void destroy(){
+    System.out.println("Close all resources");
+}
     @Override
     public void setUserName(String username) {
         this.userName = username;

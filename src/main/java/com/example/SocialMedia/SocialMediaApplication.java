@@ -25,6 +25,7 @@ public class SocialMediaApplication {
                     choose from below:
                     1.Create a Post
                     2.See All Your post
+                    3.Exit
                     """);
             int userSelect = input.nextInt();
             switch (userSelect) {
@@ -41,6 +42,9 @@ public class SocialMediaApplication {
                 case 2: {
                     postlist.getAllPost().forEach(item -> System.out.println(item.getMessage()));
                     break;
+                }
+                case 3: {
+                    context.close();
                 }
             }
         }
