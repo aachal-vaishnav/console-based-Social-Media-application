@@ -1,0 +1,145 @@
+## 🔄 Bean Life Cycle Steps
+
+1. **Instantiation**
+   - Spring creates the bean object.
+
+2. **Dependency Injection (DI)**
+   - Required dependencies are injected into the bean.
+   - Example: Injecting `PostList` into `User`.
+
+3. **Initialization**
+   - The bean is fully initialized and ready to use.
+   - The `init()` method is executed.
+
+4. **Perform Operations**
+   - The application uses the bean to perform business logic.
+
+5. **Destroy**
+   - When the Spring container is closed, the bean is destroyed.
+   - The `destroy()` method is executed.
+
+---
+
+## ⚙️ Bean Life Cycle Methods
+
+Spring provides two important lifecycle methods:
+
+### 1️⃣ init()
+- Called immediately after the bean is created and dependencies are injected.
+- Used to initialize resources.
+- Example:
+  - Database connection
+  - Cache loading
+  - Resource setup
+
+### 2️⃣ destroy()
+- Called just before the bean is destroyed.
+- Used to release resources.
+- Example:
+  - Closing database connections
+  - Releasing memory or streams
+
+---
+
+## 🌍 Real-World Example (Database Connection)
+
+Suppose you have an application that:
+- Displays a user details form
+- Takes user input (name)
+- Fetches user data from a database after submission
+
+### ❌ Bad Approach
+- Create the database connection **after** the user clicks the submit button.
+- The user has to wait for the connection.
+- This makes the application slow.
+
+### ✅ Good Approach
+- Create the database connection **when the application loads**.
+- When the user submits the form, data is fetched immediately.
+- This improves performance.
+
+👉 In this case, the **`init()` method** is very useful.
+
+---
+
+## 🧩 XML Configuration Example
+
+```xml
+<bean id="user"
+      class="com.example.SocialMedia.SimpleUser"
+      init-method="init"
+      destroy-method="destroy">
+    <property name="postList" ref="postList"/>
+</bean>
+````
+
+---
+
+## 🧑‍💻 Java Class Example
+
+```java
+public class SimpleUser implements User {
+
+    String userName;
+    PostList postList;
+
+    public void init() {
+        System.out.println("Database connection success");
+    }
+
+    public void destroy() {
+        System.out.println("Close all resources");
+    }
+
+    @Override
+    public void setUserName(String username) {
+        this.userName = username;
+    }
+
+    @Override
+    public String getUserName() {
+        return this.userName;
+    }
+
+    @Override
+    public void setPostList(PostList postList) {
+        this.postList = postList;
+    }
+
+    @Override
+    public PostList getPostList() {
+        return this.postList;
+    }
+}
+```
+
+---
+
+## 🔚 Closing the Spring Context
+
+```java
+context.close();
+```
+
+* Closes the Spring container.
+* Automatically triggers the `destroy()` method for singleton beans.
+
+---
+
+## ✅ Summary
+
+* Spring Bean Life Cycle:
+  **Instantiation → Dependency Injection → init() → Use → destroy()**
+* `init()` is used for resource initialization.
+* `destroy()` is used for resource cleanup.
+* In XML configuration:
+
+  * `init-method`
+  * `destroy-method`
+
+---
+
+### 📌 Important Note
+
+* `destroy()` is called for **singleton beans**
+* Spring does **not manage destroy methods for prototype beans**
